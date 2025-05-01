@@ -52,7 +52,7 @@ Map<String,Map<String,Function(double)>> currency = {
     'INR': (double usd) => usd * 82.0,
     'EUR': (double usd) => usd * 0.85,
     'AUD': (double usd) => usd * 1.4,
-    'CAD': (double usd) => usd * 1.25,
+    'CAD': (double usd) => usd * 1.39,
     'GBP': (double usd) => usd * 0.75,
     'JPY': (double usd) => usd * 110.0,
     'CNY': (double usd) => usd * 6.5,
@@ -103,7 +103,7 @@ Map<String,Map<String,Function(double)>> currency = {
     'NZD': (double aud) => aud * 1.1,
   },
   'CAD': {
-    'USD': (double cad) => cad * 0.8,
+    'USD': (double cad) => cad * 0.72,
     'NRS': (double cad) => cad * 100.0,
     'INR': (double cad) => cad * 70.0,
     'EUR': (double cad) => cad * 0.67,

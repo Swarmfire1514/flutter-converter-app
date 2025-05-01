@@ -1,4 +1,5 @@
 import 'package:currencttempconverter/data.dart';
+import 'package:currencttempconverter/screen/paymentScreen.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatelessWidget {
@@ -59,6 +60,17 @@ class Homescreen extends StatelessWidget {
                   );
                 },
               ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(),
+                  ),
+                );
+              },
+              child: Text('Pay with eSewa'),
             ),
           ],
         ),

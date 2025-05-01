@@ -61,6 +61,7 @@ class _TempConvState extends State<TempConv> {
                 setState(() {
                   fromUnit = value!;
                   toUnit = temp[fromUnit]!.keys.first;
+                  result = null;
                 });
               },
               items: temp.keys.map((unit) {
@@ -72,6 +73,7 @@ class _TempConvState extends State<TempConv> {
               onChanged: (value) {
                 setState(() {
                   toUnit = value!;
+                  result = null;
                 });
               },
               items: toUnitOptions.map((unit) {
@@ -81,15 +83,26 @@ class _TempConvState extends State<TempConv> {
             const SizedBox(height: 20),
             TextField(
               controller: _controller,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 labelText: 'Enter temperature',
                 border: OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    _controller.clear();
+                    setState(() {
+                      result = null;
+                    });
+                  },
+                ),
               ),
               keyboardType: TextInputType.number,
             ),
             if (result != null)
               Text('Result: ${result!.toStringAsFixed(2)} $toUnit',
-                  style: const TextStyle(fontSize: 18)),
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                  ),
             const SizedBox(height: 20),
             ElevatedButton(onPressed: convert, child: const Text('Convert')),
           ],
