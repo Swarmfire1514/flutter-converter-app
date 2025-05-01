@@ -1,3 +1,4 @@
+import 'package:currencttempconverter/data.dart';
 import 'package:flutter/material.dart';
 
 class CurrencyConv extends StatefulWidget {
@@ -11,7 +12,27 @@ class _CurrencyConvState extends State<CurrencyConv> {
   final TextEditingController _controller = TextEditingController();
   final double val = 0.0075;
   double? convertedValue;
-  bool toUSD = true;
+  String fromCurrency = 'USD';
+  String toCurrency = 'NRS';
+
+  List<String> get toCurrencyOptions => currency[fromCurrency]!.keys.toList();
+
+  void convert(){
+    try{
+      final input = double.parse(_controller.text);
+      final func = currency[fromCurrency]![toCurrency];
+      setState(() {
+        convertedValue = func!(input);
+      });
+    } catch (e) {
+      setState(() {
+        convertedValue = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid number')),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -21,8 +42,6 @@ class _CurrencyConvState extends State<CurrencyConv> {
 
   @override
   Widget build(BuildContext context) {
-    String fromCurrency = toUSD ? 'NRS' : 'USD';
-    String toCurrency = toUSD ? 'USD' : 'NRS';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Currency Converter',style: TextStyle(
@@ -43,6 +62,36 @@ class _CurrencyConvState extends State<CurrencyConv> {
             const SizedBox(height: 20),
             Column(
               children: [
+                DropdownButton<String>(
+                  value: fromCurrency,
+                  onChanged: (value) {
+                    setState(() {
+                      fromCurrency = value!;
+                      toCurrency = currency[fromCurrency]!.keys.first;
+                    });
+                  },
+                  items: currency.keys.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                DropdownButton<String>(
+                  value: toCurrency,
+                  onChanged: (value) {
+                    setState(() {
+                      toCurrency = value!;
+                    });
+                  },
+                  items: toCurrencyOptions.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                        const SizedBox(height: 20),
                 Text(
             'Convert your currency here FROM $fromCurrency TO $toCurrency',
             style: TextStyle(
@@ -58,26 +107,12 @@ class _CurrencyConvState extends State<CurrencyConv> {
             ),
             keyboardType: TextInputType.number,
                         ),
-                        Text(convertedValue == null ? '' : 'Converted Value: ${toCurrency =="USD" ? "\$" : "Rs"}${convertedValue!.toStringAsFixed(2)} USD',
+                        Text('Converted Value: ${convertedValue?.toStringAsFixed(2) ?? ''} $toCurrency',
                         style: TextStyle(
                           fontSize: 18,
                         ),),
-                      ElevatedButton(onPressed: (){
-                        setState(() {
-            double inputValue = double.parse(_controller.text);
-            convertedValue = toUSD ? inputValue * val : inputValue / val;
-                        });
-                      }, child: Text('Convert')),
-                      ElevatedButton(
-            onPressed: () {
-              setState(() {
-                toUSD = !toUSD;
-                convertedValue = null;
-                _controller.clear();
-              });
-            },
-            child: Text(toUSD ? 'Switch to USD → NRS' : 'Switch to NRS → USD'),
-                        ),
+                      ElevatedButton(onPressed: convert,
+                      child: Text('Convert')),
               ],
             ),
           ],
